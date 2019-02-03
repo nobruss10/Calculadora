@@ -56,7 +56,7 @@ class CalcController {
                 this.calc();
                 break;
             case 'ponto':
-                this.addOperation('%');
+                this.addDot();
                 break;
 
             case '0':
@@ -69,7 +69,7 @@ class CalcController {
             case '7':
             case '8':
             case '9':
-                this.addOperation(parseInt(value));
+                this.addOperation(parseFloat(value));
                 break;
             default:
                 this.setErro();
@@ -78,9 +78,26 @@ class CalcController {
         }
     }
 
+    addDot() {
+        let lastOperation = this.getLastOperation();
+
+        if (typeof lastOperation === 'string' && lastOperation.split('').indexOf('.') > -1 ) return ;
+
+        if (this.isOperator(lastOperation) || !lastOperation) {
+            this.pushOperation('0.');
+
+        } else {
+            this.setLastOperation(lastOperation.toString() + '.');
+        }
+
+        this.setLastNumberToDisplay();
+    }
+
     clearAll() {
         this._operation = [];
-        this.displayCal = 0
+        this._lastNumber = '';
+        this._lastOperator = '';
+        this.setLastNumberToDisplay();
     }
 
     clearEntry() {
@@ -110,7 +127,7 @@ class CalcController {
                 this.pushOperation(value);
             } else {
                 let newValue = this.getLastOperation() + value.toString();
-                this.setLastOperation(parseInt(newValue));
+                this.setLastOperation(newValue);
 
                 this.setLastNumberToDisplay();
             }
