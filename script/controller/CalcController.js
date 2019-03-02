@@ -21,12 +21,25 @@ class CalcController {
         }, 1000);
 
         this.setLastNumberToDisplay()
+        this.pasteFromClipboard();
+    }
+
+    copyToClipboard() {
+        let input = document.createElement('input');
+        input.value = this.displayCal;
+        document.body.appendChild(input);
+        input.remove();
+    }
+
+    pasteFromClipboard() {
+        document.addEventListener('paste', e =>{
+            let text = e.clipboardData.getData('Text');
+            this.displayCal = parseFloat(text);
+        });
     }
 
     initKeyboard() {
         document.addEventListener('keyup', e =>{
-            console.log(e);
-
             switch (e.key) {
                 case 'Escape':
                     this.clearAll();
@@ -69,6 +82,13 @@ class CalcController {
                 case '8':
                 case '9':
                     this.addOperation(parseInt(e.key));
+                    break;
+
+                case 'c':
+                    if (e.ctrlKey) this.copyToClipboard();
+                    break;
+                case 'v':
+                    if(e.ctrlKey) this.pasteFromClipboard();
                     break;
             }
            
