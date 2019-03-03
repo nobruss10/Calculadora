@@ -352,6 +352,11 @@ class CalcController {
     }
 
     set displayCal(value) {
+        if(value.toString().length > 10 ) {
+            this.setErro();
+            return false;
+        }
+
         this._displayCalEl.innerHTML = value;
     }
 
